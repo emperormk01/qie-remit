@@ -1,0 +1,22 @@
+{
+  "name": "qie-remit",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "compile": "bun scripts/compile.ts",
+    "deploy-contracts": "bun scripts/deploy.ts"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260603.0",
+    "typescript": "^5.8.3",
+    "wrangler": "^4.100.0",
+    "solc": "^0.8.28"
+  },
+  "dependencies": {
+    "viem": "^2.52.2",
+    "pdf-lib": "^1.17.1"
+  }
+}
