@@ -144,7 +144,7 @@ async function handleMessage(env: Env, msg: TgMessage, origin: string): Promise<
         return sendText(env, chatId, `**You're already registered.**\n\nWallet: \`${user.wallet_address}\`\nPay link: ${originFor(env, origin)}/pay/${slug}\n\nTo change your address, send: /wallet <new_address>`, mainKeyboard());
       }
       await setWizard(env, userId, "wallet_addr");
-      return sendText(env, chatId, "Send your QIE receive address (starts with `0x`).", cancelKb());
+      return sendText(env, chatId, "Send your QIE receive address (0x…).\n\nTIP: If you don't have a QIE Wallet, you can get one here: www.qiewallet.me", cancelKb());
     }
     case "verify": {
       if (cmd.args) return doVerify(env, chatId, user, cmd.args, origin);
@@ -197,12 +197,13 @@ async function onStart(env: Env, chatId: number, user: any, origin: string): Pro
 }
 
 async function doWallet(env: Env, chatId: number, user: any, addrInput: string, origin: string): Promise<void> {
-  const addr = checksumAddress(addrInput.trim());
-  if (!isValidAddress(addr)) { await sendText(env, chatId, "That's not a valid EVM address. It must start with `0x` and be 42 chars.", mainKeyboard()); return; }
+  const raw = addrInput.trim();
+  if (!isValidAddress(raw)) { await sendText(env, chatId, "That's not a valid EVM address. It must start with `0x` and be 42 chars.", mainKeyboard()); return; }
+  const addr = checksumAddress(raw);
   let slug = user.remit_slug;
   if (!slug) { slug = genSlug(user.username || `u${user.tg_user_id}`); }
   await updateUserWallet(env, user.id, addr, slug);
-  await sendText(env, chatId, `Wallet set to \`${addr}\`.\nPay link: ${originFor(env, origin)}/pay/${slug}\n\nNext: /verify your identity.`, mainKeyboard());
+  await sendText(env, chatId, `Wallet set successfully.\n\nWallet: \`${addr}\`\nPay link: ${originFor(env, origin)}/pay/${slug}\n\nNext: /verify your identity.`, mainKeyboard());
 }
 
 async function doVerify(env: Env, chatId: number, user: any, name: string, origin: string): Promise<void> {
@@ -359,7 +360,7 @@ async function handleCallback(env: Env, cb: TgCallback, origin: string): Promise
       return sendText(env, chatId, `**You're already registered.**\n\nWallet: \`${user.wallet_address}\`\nPay link: ${originFor(env, origin)}/pay/${slug}\n\nTo change your address, send: /wallet <new_address>`, mainKeyboard());
     }
     await setWizard(env, userId, "wallet_addr");
-    return sendText(env, chatId, "Send your QIE receive address (`0x…`).", cancelKb());
+    return sendText(env, chatId, "Send your QIE receive address (0x…).\n\nTIP: If you don't have a QIE Wallet, you can get one here: www.qiewallet.me", cancelKb());
   }
   if (data === "act:verify") {
     if (user.pass_verified) {
