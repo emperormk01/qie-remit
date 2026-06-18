@@ -224,6 +224,9 @@ The receipt shows the amount, who paid, when, and the transaction on the blockch
 
 ### Architecture
 
+![System Architecture](images/01-system-architecture.png)
+
+
 ```markdown
             Telegram (user DM)
                   │  POST /telegram (X-Telegram-Bot-Api-Secret-Token)
@@ -274,6 +277,9 @@ These are the **live** addresses on QIE Testnet (paris-compiled, native-QIE):
 - **Operator wallet**: auto-generated EOA, private key AES-GCM encrypted in KV
   `CONFIG`. 
 
+
+![Smart Contract Layer](images/03-smart-contract-layer.png)
+
 ### IdentityRegistry (`contracts/IdentityRegistry.sol`)
 
 On-chain identity attestation store (not the official QIE Pass). Operator is the sole verifier at deploy.
@@ -310,6 +316,9 @@ native QIE to the invoice's creator.
 4. `db.createInvoiceRow()` stores the row with the on-chain id + slug
 5. Bot replies with `https://<worker>/invoice/<slug>`
 
+
+![Invoice Lifecycle](images/02-invoice-lifecycle.png)
+
 ### Request Flow — Payment
 
 1. Client opens `/invoice/<slug>` → `pages.invoicePage()` renders HTML + ethers
@@ -318,6 +327,9 @@ native QIE to the invoice's creator.
 4. `registry.payInvoice(id, { value: amount })` — single native-QIE transaction, no approve step
 5. `InvoiceRegistry.payInvoice` forwards the QIE to the creator
 6. Client POSTs tx hash to `/api/invoice/<slug>/confirm` → `chain.verifyPaymentTx()` verifies receipt → `db.markInvoicePaid()` → bot notifies freelancer
+
+
+![Payment Detection](images/05-payment-detection.png)
 
 ### Directory Structure
 
@@ -348,6 +360,9 @@ qie-remit/
 ├── tsconfig.json
 └── .dev.vars.example              # Local dev secrets template
 ```
+
+
+![Telegram Bot Channel](images/04-telegram-bot-channel.png)
 
 ### D1 Schema (`file schema.sql`)
 
