@@ -487,3 +487,6 @@ real QIE — switch `QIE_RPC` / `QIE_CHAIN_ID` and redeploy.
 ---
 
 **QIE Remit**: Send invoices. Get paid in crypto. That simple.
+---
+
+**Prepared by Emperor M.K** ([@emperormk01](https://github.com/emperormk01) — emperormk01@gmail.com) — Telegram [@emperormk01](https://t.me/emperormk01)
